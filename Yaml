@@ -1,0 +1,36 @@
+name: MillionPercentBuild
+on:
+  push:
+    branches: [ main ] # ÙØ´ØªØºÙ ÙÙØ±Ø§Ù Ø¹ÙØ¯ Ø£Ù ØªØ­Ø¯ÙØ« ÙÙ ÙØ±Ø¹ main
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install Buildozer Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip3 install --user --upgrade buildozer cython virtualenv
+
+      - name: Build APK with Military Encryption
+        run: |
+          # Ø§Ø³ØªØ®Ø¯Ø§Ù ÙÙØ¯ Ø§ÙØµØ§Ø±ÙØ® Ø§ÙÙÙÙÙ ÙÙØ¨ÙØ§Ø¡ Ø¨Ø£ÙØµÙ Ø³Ø±Ø¹Ø©
+          yes | buildozer -v android debug
+        continue-on-error: false
+
+      - name: Upload Global AI APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: Global-AI-Shield-Re
