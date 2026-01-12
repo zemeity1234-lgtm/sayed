@@ -3,13 +3,11 @@ name: NuclearRocketBuild2026
 on:
   push:
     branches: [ main ]
-  workflow_dispatch: # Allows manual trigger for emergency restarts
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Auto-restart logic if any step fails
-    continue-on-error: false 
 
     steps:
       - name: Global Code Sync
@@ -19,7 +17,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip' # Auto-cache for rocket speed
+          # Removed the cache line that caused the error in your image
 
       - name: Automated Dependency Intelligence
         run: |
@@ -27,19 +25,17 @@ jobs:
           sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
           pip install --upgrade pip setuptools virtualenv
           pip install cython==0.29.33 buildozer
-          # Auto-fix missing libraries logic
           pip install --upgrade cryptography requests urllib3 certifi
 
       - name: Nuclear Build Process
         run: |
-          # Command to force-build everything from scratch to prevent errors
+          # The core engine that builds your global application
           yes | buildozer -v android debug
         shell: bash
 
       - name: Global APK Deployment
         if: success()
-        uses: actions/upload-artifact@v4 # Updated to v4 to fix your error
+        uses: actions/upload-artifact@v4 # Fixed version to resolve your previous error
         with:
           name: Global-Shield-Nuclear-Release
           path: bin/*.apk
-          retention-days: 7
