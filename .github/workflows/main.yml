@@ -1,4 +1,4 @@
-name: NuclearRocketBuild2026
+name: GlobalNuclearBuild2026
 
 on:
   push:
@@ -8,34 +8,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Global Code Sync
+      - name: Checkout Code Base
         uses: actions/checkout@v4
 
-      - name: AI Python Environment Setup
+      - name: Setup Global Python AI
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          # Removed the cache line that caused the error in your image
 
-      - name: Automated Dependency Intelligence
+      - name: Auto Install All Missing Libraries
         run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev cmake libffi-dev libssl-dev
           pip install --upgrade pip setuptools virtualenv
           pip install cython==0.29.33 buildozer
-          pip install --upgrade cryptography requests urllib3 certifi
+          pip install --upgrade cryptography requests urllib3 certifi jnius
 
-      - name: Nuclear Build Process
+      - name: Execute Nuclear Build
         run: |
-          # The core engine that builds your global application
           yes | buildozer -v android debug
         shell: bash
 
-      - name: Global APK Deployment
+      - name: Deploy Global APK
         if: success()
-        uses: actions/upload-artifact@v4 # Fixed version to resolve your previous error
+        uses: actions/upload-artifact@v4
         with:
-          name: Global-Shield-Nuclear-Release
+          name: Global-Nuclear-APK-Release
           path: bin/*.apk
+          retention-days: 7
